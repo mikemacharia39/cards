@@ -9,9 +9,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.logicea.cards.domain.enumeration.Role;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Getter
 @SuperBuilder
 @Entity
 @NoArgsConstructor
