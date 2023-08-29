@@ -4,6 +4,7 @@ import com.logicea.cards.domain.enumeration.Status;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,10 +17,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "card")
 public class Card extends BaseEntity {
+
+    @Column(nullable = false)
     private String name;
     private String description;
     private String color;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status = Status.TODO;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

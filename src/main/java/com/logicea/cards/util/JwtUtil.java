@@ -13,19 +13,16 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtil {
 
-
     private final JwtParser jwtParser;
-
-    @Value("${app.jwt.secretKey}")
-    private String secretKey;
-    @Value("${app.jwt.accessTokenValiditySeconds}")
-    private Long accessTokenValidity;
+//    @Value("${app.jwt.secretKey}")
+    private String secretKey = "secretKey";
+//    @Value("${app.jwt.accessTokenValiditySeconds}")
+    private Long accessTokenValidity = 3600L;
 
     public JwtUtil() {
         this.jwtParser = Jwts.parser().setSigningKey(secretKey);

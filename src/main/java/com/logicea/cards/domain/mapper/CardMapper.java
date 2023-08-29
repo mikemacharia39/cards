@@ -5,8 +5,10 @@ import com.logicea.cards.dto.CardRequestDto;
 import com.logicea.cards.dto.CardResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Component
+@Mapper(componentModel = "spring")
 public interface CardMapper {
 
     @Mapping(target = "id", ignore = true)

@@ -2,6 +2,7 @@ package com.logicea.cards.configuration;
 
 import com.logicea.cards.configuration.filter.JwtAuthFilter;
 import com.logicea.cards.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,12 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private UserService userService;
-    private JwtAuthFilter jwtAuthFilter;
+    private final UserService userService;
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
