@@ -1,6 +1,8 @@
 package com.logicea.cards.domain.entity;
 
 import com.logicea.cards.domain.enumeration.Status;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -12,7 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@Getter
 @SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "card")

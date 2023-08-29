@@ -20,7 +20,7 @@ public class JwtUtil {
 
     private final JwtParser jwtParser;
 //    @Value("${app.jwt.secretKey}")
-    private String secretKey = "secretKey";
+    private String secretKey = "3723f9a0eioeu1iu2oi12wdjoi2ueoielqsl8b7a4e4a190231jwiowekwjckewnineroicjei3238eu12oeuw9b0a5b5a4a0a0a0a";
 //    @Value("${app.jwt.accessTokenValiditySeconds}")
     private Long accessTokenValidity = 3600L;
 

@@ -10,7 +10,6 @@ public record CardResponseDto(
         String description,
         String color,
         Status status,
-        String email,
         String dateCreated
 ) {
 }

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @SuperBuilder
@@ -29,4 +30,10 @@ abstract class BaseEntity {
     @LastModifiedDate
     @Column(name = "date_modified", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime dateModified;
+
+    @PrePersist
+    public void prePersist() {
+        dateCreated = LocalDateTime.now();
+        dateModified = LocalDateTime.now();
+    }
 }
