@@ -20,7 +20,7 @@ You can uncomment the h2 database properties and comment the MySQL properties.
 #spring.datasource.password=password
 #spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 ````
-The only downside applications 
+The only downside to running with *h2* is a prepared statement error, not sure why it's happening
 
 Then run the application using the command below:
 ````
