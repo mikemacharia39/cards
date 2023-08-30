@@ -87,4 +87,12 @@
     <changeSet author="Mikehenry" id="202308292000-4">
         <addUniqueConstraint columnNames="email" constraintName="UK-user-email" tableName="user"/>
     </changeSet>
+
+    <changeSet author="Mikehenry" id="202308292000-5" runOnChange="true">
+        <loadUpdateData encoding="UTF-8"
+                        file="db/changelog/seed/initial_card_seed.csv"
+                        primaryKey="id"
+                        separator=";"
+                        tableName="card" />
+    </changeSet>
 </databaseChangeLog>

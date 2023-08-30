@@ -1,0 +1,9 @@
+id;name;description;color;status;user_id;date_created;date_modified
+1;Define DB Schema;Test cases for card;#FF00FF;TODO;1;2023-08-30 20:00:00;2023-08-30 20:00:00
+2;Encryption;Implement encryption;#FF0000;TODO;1;2023-08-30 20:00:00;2023-08-30 20:00:00
+3;Security;Implement security for users;#000000;TODO;2;2023-08-30 20:00:00;2023-08-30 20:00:00
+4;Debug Cases;Test cases for card;#FF00FF;TODO;2;2023-08-30 20:00:00;2023-08-30 20:00:00
+5;Swagger checks;OpenAPI Addition;#FF00FF;TODO;1;2023-08-30 20:00:00;2023-08-30 20:00:00
+6;KOTEST;KOTEST integration testing;#FF0000;TODO;1;2023-08-30 20:00:00;2023-08-30 20:00:00
+7;Deployment;Deployment;#C0C000;TODO;2;2023-08-30 20:00:00;2023-08-30 20:00:00
+8;Monitoring;Monitors;#937737;TODO;2;2023-08-30 20:00:00;2023-08-30 20:00:00
