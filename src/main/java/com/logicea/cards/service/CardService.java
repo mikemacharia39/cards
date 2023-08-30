@@ -8,6 +8,8 @@ import com.logicea.cards.domain.repository.CardRepository;
 import com.logicea.cards.domain.specification.CardSpecification;
 import com.logicea.cards.dto.CardRequestDto;
 import com.logicea.cards.dto.CardResponseDto;
+import com.logicea.cards.exception.NotFoundProblem;
+import com.logicea.cards.exception.UnauthorizedProblem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -52,7 +55,7 @@ public class CardService {
     public Card findCardById(final Long id, final User user) {
         Optional<Card> optionalCard = cardRepository.findById(id);
         if (optionalCard.isEmpty()) {
-            throw new RuntimeException("Card not found");
+            throw new NotFoundProblem("Card not found", Map.of("id", id));
         }
         Card card = optionalCard.get();
 
@@ -72,13 +75,13 @@ public class CardService {
         if (cardRepository.existsById(id)) {
             cardRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Card not found");
+            throw new NotFoundProblem("Card not found", Map.of("id", id));
         }
     }
 
     private void isAuthorized(final Card card, final User user) {
         if (!Objects.equals(card.getUser().getId(), user.getId()) && !user.isAdmin()) {
-            throw new RuntimeException("Unauthorized");
+            throw new UnauthorizedProblem("Unauthorized");
         }
     }
 }

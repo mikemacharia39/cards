@@ -7,7 +7,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
@@ -19,20 +18,19 @@ import java.util.concurrent.TimeUnit;
 public class JwtUtil {
 
     private final JwtParser jwtParser;
-//    @Value("${app.jwt.secretKey}")
-    private String secretKey = "3723f9a0eioeu1iu2oi12wdjoi2ueoielqsl8b7a4e4a190231jwiowekwjckewnineroicjei3238eu12oeuw9b0a5b5a4a0a0a0a";
-//    @Value("${app.jwt.accessTokenValiditySeconds}")
-    private Long accessTokenValidity = 3600L;
+
+    private static final String SECRET_KEY = "3723f9a0eioeu1iu2oi12wdjoi2ueoielqsl8b7a4e4a190231jwiowekwjckewnineroicjei3238eu12oeuw9b0a5b5a4a0a0a0a";
+    private static final Long ACCESS_TOKEN_VALIDITY = 84600L;
 
     public JwtUtil() {
-        this.jwtParser = Jwts.parser().setSigningKey(secretKey);
+        this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
     }
 
     public LoginResponseDto generateResponse(User user) {
         String token = createToken(user);
         return LoginResponseDto.builder()
                 .token(token)
-                .expiresIn(accessTokenValidity)
+                .expiresIn(ACCESS_TOKEN_VALIDITY)
                 .build();
     }
 
@@ -41,13 +39,13 @@ public class JwtUtil {
         claims.put("email", user.getEmail());
         claims.put("roles", user.getRole());
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(ACCESS_TOKEN_VALIDITY));
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(tokenCreateTime)
                 .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 

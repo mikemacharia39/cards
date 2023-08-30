@@ -3,6 +3,7 @@ package com.logicea.cards.service;
 import com.logicea.cards.domain.entity.User;
 import com.logicea.cards.domain.repository.UserRepository;
 import com.logicea.cards.dto.LoginRequestDto;
+import com.logicea.cards.exception.UnauthorizedProblem;
 import com.logicea.cards.util.PasswordUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +21,7 @@ public class UserService {
                 .orElseThrow();
 
         if (!passwordUtils.matches(request.password(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new UnauthorizedProblem("Invalid password");
         }
 
         return user;
