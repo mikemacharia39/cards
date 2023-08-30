@@ -15,6 +15,7 @@ public interface CardMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dateCreated", ignore = true)
     @Mapping(target = "dateModified", ignore = true)
+    @Mapping(target = "status", defaultValue = "TODO")
     Card toEntity(CardRequestDto dto, User user);
 
     @Mapping(target = "dateCreated", dateFormat = "yyyy-MM-dd HH:mm:ss")

@@ -20,7 +20,7 @@ public class JwtUtil {
     private final JwtParser jwtParser;
 
     private static final String SECRET_KEY = "3723f9a0eioeu1iu2oi12wdjoi2ueoielqsl8b7a4e4a190231jwiowekwjckewnineroicjei3238eu12oeuw9b0a5b5a4a0a0a0a";
-    private static final Long ACCESS_TOKEN_VALIDITY = 84600L;
+    private static final Long ACCESS_TOKEN_VALIDITY = 840L;
 
     public JwtUtil() {
         this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
