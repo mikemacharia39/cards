@@ -67,7 +67,8 @@ public class CardService {
                 .map(cardMapper::toDto);
     }
 
-    public void deleteCard(final Long id) {
+    public void deleteCard(final Long id, final User user) {
+        findCardById(id, user);
         if (cardRepository.existsById(id)) {
             cardRepository.deleteById(id);
         } else {

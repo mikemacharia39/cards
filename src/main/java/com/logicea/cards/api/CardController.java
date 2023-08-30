@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,8 +85,10 @@ public class CardController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCard(@Valid @PathVariable Long id) {
-        cardService.deleteCard(id);
-        ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCard(@Valid @PathVariable Long id, HttpServletRequest servletRequest) {
+        final Principal principal = servletRequest.getUserPrincipal();
+        final User user = userService.loadUserByUsername(principal.getName());
+        cardService.deleteCard(id, user);
     }
 }
