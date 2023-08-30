@@ -23,4 +23,10 @@ public interface CardMapper {
     @Mapping(target = "color", source = "color")
     @Mapping(target = "status", source = "status")
     CardResponseDto toDto(Card entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dateCreated", ignore = true)
+    @Mapping(target = "dateModified", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    Card mutateEntity(CardRequestDto dto);
 }

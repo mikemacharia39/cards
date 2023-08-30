@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,9 +34,18 @@ public class CardService {
     }
 
     public CardResponseDto updateCard(final Long id, final CardRequestDto dto, final User user) {
-        Card card = cardRepository.findById(id)
-                .map(card1 -> cardMapper.toEntity(dto, user))
-                .orElseThrow();
+        Optional<Card> optionalCard = cardRepository.findById(id);
+        if (optionalCard.isEmpty()) {
+            throw new RuntimeException("Card not found");
+        }
+
+        Card card = optionalCard.get();
+        card.setColor(dto.color());
+        card.setDescription(dto.description());
+        card.setName(dto.name());
+        card.setStatus(dto.status());
+
+        log.info("Card updated: {}", card.getName());
         return cardMapper.toDto(cardRepository.save(card));
     }
 
@@ -44,8 +55,9 @@ public class CardService {
                 .orElseThrow();
     }
 
-    public Page<CardResponseDto> searchCards(final List<Status> status, final LocalDate dateCreated, final String search, final Pageable pageable) {
-        return cardRepository.findAll(CardSpecification.searchCard(status, dateCreated, search), pageable)
+    public Page<CardResponseDto> searchCards(final List<Status> status, final LocalDate dateCreated,
+                                             final String search, final Pageable pageable, final User user) {
+        return cardRepository.findAll(CardSpecification.searchCard(status, dateCreated, search, user), pageable)
                 .map(cardMapper::toDto);
     }
 

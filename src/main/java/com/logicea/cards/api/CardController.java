@@ -74,8 +74,11 @@ public class CardController {
     public ResponseEntity<Page<CardResponseDto>> searchCards(@Valid @RequestParam(value = "statuses", required = false) List<Status> statuses,
                                                              @Valid @RequestParam(value = "dateCreated", required = false) LocalDate dateCreated,
                                                              @Valid @RequestParam(value = "search", required = false) String search,
-                                                             final Pageable pageable) {
-        return ResponseEntity.ok(cardService.searchCards(statuses, dateCreated, search, pageable));
+                                                             final Pageable pageable,
+                                                             final HttpServletRequest servletRequest) {
+        final Principal principal = servletRequest.getUserPrincipal();
+        final User user = userService.loadUserByUsername(principal.getName());
+        return ResponseEntity.ok(cardService.searchCards(statuses, dateCreated, search, pageable, user));
     }
 
     @DeleteMapping("/{id}")

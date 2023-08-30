@@ -25,4 +25,8 @@ public class User extends BaseEntity {
     private Role role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards;
+
+    public boolean isAdmin() {
+        return role == Role.ADMIN;
+    }
 }

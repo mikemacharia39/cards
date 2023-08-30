@@ -1,2 +1,4 @@
 id;email;password;role;date_created;date_modified
 1;mike@mail.com;$2a$10$PrI/tvLPMDknVs3I8ge0Tu3uR1HgdHoDhwfBIF0M1ZbGY7IQMC79C;MEMBER;2023-08-29 20:00:00;2023-08-29 20:00:00
+2;thanos@mail.com;$2a$10$PrI/tvLPMDknVs3I8ge0Tu3uR1HgdHoDhwfBIF0M1ZbGY7IQMC79C;ADMIN;2023-08-29 20:00:00;2023-08-29 20:00:00
+3;henry@mail.com;$2a$10$PrI/tvLPMDknVs3I8ge0Tu3uR1HgdHoDhwfBIF0M1ZbGY7IQMC79C;MEMBER;2023-08-29 20:00:00;2023-08-29 20:00:00

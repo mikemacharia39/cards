@@ -1,6 +1,7 @@
 package com.logicea.cards.domain.specification;
 
 import com.logicea.cards.domain.entity.Card;
+import com.logicea.cards.domain.entity.User;
 import com.logicea.cards.domain.enumeration.Status;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,8 @@ public class CardSpecification {
 
     private CardSpecification() {}
 
-    public static Specification<Card> searchCard(final List<Status> status, final LocalDate dateCreated, final String search) {
+    public static Specification<Card> searchCard(final List<Status> status, final LocalDate dateCreated,
+                                                 final String search, final User user) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (status != null && !status.isEmpty()) {
@@ -30,6 +32,9 @@ public class CardSpecification {
                         cb.like(root.get("description"), "%" + search + "%"),
                         cb.like(root.get("color"), "%" + search + "%")
                 ));
+            }
+            if (!user.isAdmin()) {
+                predicates.add(cb.equal(root.get("user"), user));
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
