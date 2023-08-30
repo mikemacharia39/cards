@@ -48,8 +48,7 @@ public class CardController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Card created", response = CardResponseDto.class),
             @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(code = 401, message = "Unauthorized")
     })
     @PostMapping(consumes = "application/json", produces = {"application/json", "application/problem+json"})
     public ResponseEntity<CardResponseDto> createCard(@Valid @RequestBody CardRequestDto request, HttpServletRequest servletRequest) {
@@ -58,6 +57,12 @@ public class CardController {
         return new ResponseEntity<>(cardService.addCard(request, user), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Update a card")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Card updated", response = CardResponseDto.class),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<CardResponseDto> updateCard(@Valid @PathVariable Long id, @Valid @RequestBody CardRequestDto request,
                                                       HttpServletRequest servletRequest) {
@@ -66,6 +71,12 @@ public class CardController {
         return ResponseEntity.ok(cardService.updateCard(id, request, user));
     }
 
+    @ApiOperation(value = "Get a card")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Card Data", response = CardResponseDto.class),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<CardResponseDto> getCard(@Valid @PathVariable Long id, HttpServletRequest servletRequest) {
         final Principal principal = servletRequest.getUserPrincipal();
@@ -73,6 +84,12 @@ public class CardController {
         return ResponseEntity.ok(cardService.getCard(id, user));
     }
 
+    @ApiOperation(value = "Search for a card")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of cards"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
     @GetMapping("/search")
     public ResponseEntity<Page<CardResponseDto>> searchCards(@Valid @RequestParam(value = "statuses", required = false) List<Status> statuses,
                                                              @Valid @RequestParam(value = "dateCreated", required = false) LocalDate dateCreated,
@@ -84,6 +101,11 @@ public class CardController {
         return ResponseEntity.ok(cardService.searchCards(statuses, dateCreated, search, pageable, user));
     }
 
+    @ApiOperation(value = "Delete a card")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Card deleted"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCard(@Valid @PathVariable Long id, HttpServletRequest servletRequest) {

@@ -1,11 +1,15 @@
 package com.logicea.cards.api;
 
 import com.logicea.cards.domain.entity.User;
+import com.logicea.cards.dto.CardResponseDto;
 import com.logicea.cards.dto.LoginRequestDto;
 import com.logicea.cards.dto.LoginResponseDto;
 import com.logicea.cards.service.UserService;
 import com.logicea.cards.util.JwtUtil;
 import com.logicea.cards.util.PasswordUtils;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +29,12 @@ public class AuthenticationController {
     private final PasswordUtils passwordUtils;
     private final UserService userService;
 
+    @ApiOperation(value = "Generate a token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Token created", response = LoginResponseDto.class),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody LoginRequestDto request) {
 
