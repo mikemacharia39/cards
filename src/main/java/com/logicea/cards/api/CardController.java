@@ -66,8 +66,10 @@ public class CardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CardResponseDto> getCard(@Valid @PathVariable Long id) {
-        return ResponseEntity.ok(cardService.getCard(id));
+    public ResponseEntity<CardResponseDto> getCard(@Valid @PathVariable Long id, HttpServletRequest servletRequest) {
+        final Principal principal = servletRequest.getUserPrincipal();
+        final User user = userService.loadUserByUsername(principal.getName());
+        return ResponseEntity.ok(cardService.getCard(id, user));
     }
 
     @GetMapping("/search")

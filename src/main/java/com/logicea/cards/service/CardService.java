@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,12 +34,8 @@ public class CardService {
     }
 
     public CardResponseDto updateCard(final Long id, final CardRequestDto dto, final User user) {
-        Optional<Card> optionalCard = cardRepository.findById(id);
-        if (optionalCard.isEmpty()) {
-            throw new RuntimeException("Card not found");
-        }
+        Card card = findCardById(id, user);
 
-        Card card = optionalCard.get();
         card.setColor(dto.color());
         card.setDescription(dto.description());
         card.setName(dto.name());
@@ -49,10 +45,20 @@ public class CardService {
         return cardMapper.toDto(cardRepository.save(card));
     }
 
-    public CardResponseDto getCard(final Long id) {
-        return cardRepository.findById(id)
-                .map(cardMapper::toDto)
-                .orElseThrow();
+    public CardResponseDto getCard(final Long id, final User user) {
+        return cardMapper.toDto(findCardById(id, user));
+    }
+
+    public Card findCardById(final Long id, final User user) {
+        Optional<Card> optionalCard = cardRepository.findById(id);
+        if (optionalCard.isEmpty()) {
+            throw new RuntimeException("Card not found");
+        }
+        Card card = optionalCard.get();
+
+        isAuthorized(card, user);
+
+        return card;
     }
 
     public Page<CardResponseDto> searchCards(final List<Status> status, final LocalDate dateCreated,
@@ -66,6 +72,12 @@ public class CardService {
             cardRepository.deleteById(id);
         } else {
             throw new RuntimeException("Card not found");
+        }
+    }
+
+    private void isAuthorized(final Card card, final User user) {
+        if (!Objects.equals(card.getUser().getId(), user.getId()) && !user.isAdmin()) {
+            throw new RuntimeException("Unauthorized");
         }
     }
 }
