@@ -1,7 +1,6 @@
 package com.logicea.cards.api;
 
 import com.logicea.cards.domain.entity.User;
-import com.logicea.cards.dto.CardResponseDto;
 import com.logicea.cards.dto.LoginRequestDto;
 import com.logicea.cards.dto.LoginResponseDto;
 import com.logicea.cards.service.UserService;
@@ -44,7 +43,7 @@ public class AuthenticationController {
     }
 
     /**
-     * This endpoint is used to encrypt a password to be used in the data.sql file
+     * This endpoint is used to encrypt a password to be used in the user_creation_seed.csv file
      */
     @GetMapping("/encrypt")
     public ResponseEntity<String> encrypt(@RequestParam String password) {
