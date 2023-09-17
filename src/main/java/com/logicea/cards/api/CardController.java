@@ -90,7 +90,7 @@ public class CardController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized")
     })
-    @GetMapping("/search")
+    @GetMapping("/")
     public ResponseEntity<Page<CardResponseDto>> searchCards(@Valid @RequestParam(value = "statuses", required = false) List<Status> statuses,
                                                              @Valid @RequestParam(value = "dateCreated", required = false) LocalDate dateCreated,
                                                              @Valid @RequestParam(value = "search", required = false) String search,
