@@ -20,7 +20,7 @@ public class JwtUtil {
     private final JwtParser jwtParser;
 
     private static final String SECRET_KEY = "3723f9a0eioeu1iu2oi12wdjoi2ueoielqsl8b7a4e4a190231jwiowekwjckewnineroicjei3238eu12oeuw9b0a5b5a4a0a0a0a";
-    private static final Long ACCESS_TOKEN_VALIDITY = 840L;
+    private static final Long ACCESS_TOKEN_VALIDITY = 3600L;
 
     public JwtUtil() {
         this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
@@ -39,7 +39,7 @@ public class JwtUtil {
         claims.put("email", user.getEmail());
         claims.put("roles", user.getRole());
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(ACCESS_TOKEN_VALIDITY));
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.SECONDS.toMillis(ACCESS_TOKEN_VALIDITY));
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getEmail())
