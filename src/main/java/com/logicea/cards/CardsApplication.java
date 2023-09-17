@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
-@SpringBootApplication(scanBasePackages = "com.logicea.cards")
+@SpringBootApplication
 public class CardsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CardsApplication.class, args);
