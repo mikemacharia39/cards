@@ -34,7 +34,7 @@ public class AuthenticationController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized")
     })
-    @PostMapping("/login")
+    @PostMapping("/token")
     public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody LoginRequestDto request) {
 
         User user = userService.validateUser(request);
