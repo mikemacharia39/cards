@@ -3,9 +3,7 @@
 This a card API that allows you to create, edit, delete and view cards.
 
 ## Documentation
-The Swagger API documentation is available on: `http://localhost:8000/swagger-ui/index.html`
-
-The Open api documentation is available on: `http://localhost:8000/v3/api-docs`
+The Swagger API documentation is available on: `http://localhost:8000/authentication-docs/swagger-ui/index.html`
 
 ## Running the application
 To run the application, you need MySQL installed and then create the database card. \
