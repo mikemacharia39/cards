@@ -56,7 +56,7 @@ public class CardController {
     @PostMapping(consumes = "application/json", produces = {"application/json", "application/problem+json"})
     public ResponseEntity<CardResponseDto> createCard(@Valid @RequestBody CardRequestDto request, HttpServletRequest servletRequest) {
         final Principal principal = servletRequest.getUserPrincipal();
-        final User user = userService.loadUserByUsername(principal.getName());
+        final User user = userService.loadUserByEmail(principal.getName());
         return new ResponseEntity<>(cardService.addCard(request, user), HttpStatus.CREATED);
     }
 
@@ -70,7 +70,7 @@ public class CardController {
     public ResponseEntity<CardResponseDto> updateCard(@Valid @PathVariable Long id, @Valid @RequestBody CardRequestDto request,
                                                       HttpServletRequest servletRequest) {
         final Principal principal = servletRequest.getUserPrincipal();
-        final User user = userService.loadUserByUsername(principal.getName());
+        final User user = userService.loadUserByEmail(principal.getName());
         return ResponseEntity.ok(cardService.updateCard(id, request, user));
     }
 
@@ -83,7 +83,7 @@ public class CardController {
     @GetMapping("/{id}")
     public ResponseEntity<CardResponseDto> getCard(@Valid @PathVariable Long id, HttpServletRequest servletRequest) {
         final Principal principal = servletRequest.getUserPrincipal();
-        final User user = userService.loadUserByUsername(principal.getName());
+        final User user = userService.loadUserByEmail(principal.getName());
         return ResponseEntity.ok(cardService.getCard(id, user));
     }
 
@@ -100,7 +100,7 @@ public class CardController {
                                                              final Pageable pageable,
                                                              final HttpServletRequest servletRequest) {
         final Principal principal = servletRequest.getUserPrincipal();
-        final User user = userService.loadUserByUsername(principal.getName());
+        final User user = userService.loadUserByEmail(principal.getName());
         return ResponseEntity.ok(cardService.searchCards(statuses, dateCreated, search, pageable, user));
     }
 
@@ -113,7 +113,7 @@ public class CardController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCard(@Valid @PathVariable Long id, HttpServletRequest servletRequest) {
         final Principal principal = servletRequest.getUserPrincipal();
-        final User user = userService.loadUserByUsername(principal.getName());
+        final User user = userService.loadUserByEmail(principal.getName());
         cardService.deleteCard(id, user);
     }
 }
