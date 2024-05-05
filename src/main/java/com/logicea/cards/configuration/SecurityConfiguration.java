@@ -5,11 +5,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -27,22 +31,33 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new DelegatingSecurityContextRepository(
+                new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository()
+        );
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/v3/api-docs").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-        httpSecurity.csrf().disable();
-        httpSecurity.headers().frameOptions().disable();
-
+        httpSecurity
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/webjars/**").permitAll()
+                                .requestMatchers("/v3/api-docs").permitAll()
+                                .requestMatchers("/swagger-resources/**").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .securityContext(request -> request
+                        .securityContextRepository(securityContextRepository())
+                );
         return httpSecurity.build();
     }
 }

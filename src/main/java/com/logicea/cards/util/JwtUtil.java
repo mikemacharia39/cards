@@ -10,9 +10,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class JwtUtil {
