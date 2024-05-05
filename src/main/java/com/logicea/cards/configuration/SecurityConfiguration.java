@@ -4,6 +4,7 @@ import com.logicea.cards.configuration.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -50,12 +51,13 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/webjars/**").permitAll()
-                                .requestMatchers("/v3/api-docs").permitAll()
-                                .requestMatchers("/swagger-resources/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/h2-console/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/swagger-ui/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/webjars/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/v3/api-docs").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/authentication-docs/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .securityContext(request -> request
