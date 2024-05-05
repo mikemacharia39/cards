@@ -10,7 +10,6 @@ import com.logicea.cards.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,21 +27,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
 @Validated
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/cards")
 public class CardController {
 
     private final CardService cardService;
     private final UserService userService;
+
+    public CardController(CardService cardService, UserService userService) {
+        this.cardService = cardService;
+        this.userService = userService;
+    }
 
     @ApiOperation(value = "Create a card")
     @ApiResponses(value = {
