@@ -41,12 +41,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            log.info("accessToken : " + accessToken);
+            log.info("accessToken : {}", accessToken);
             Claims claims = jwtUtil.resolveClaims(request);
 
             if (claims != null && jwtUtil.validateClaims(claims)) {
                 String email = claims.getSubject();
-                log.info("email : " + email);
+                log.info("email : {}", email);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(email, "", List.of());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
