@@ -7,12 +7,16 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import jakarta.servlet.http.HttpServletRequest;
+
+import javax.crypto.spec.SecretKeySpec;
 
 @Component
 public class JwtUtil {
@@ -23,7 +27,10 @@ public class JwtUtil {
     private static final Long ACCESS_TOKEN_VALIDITY = 3600L;
 
     public JwtUtil() {
-        this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
+        this.jwtParser = Jwts.parser()
+                .setSigningKey(secretKeySpec)
+                .build();
     }
 
     public LoginResponseDto generateResponse(User user) {
@@ -35,17 +42,14 @@ public class JwtUtil {
     }
 
     public String createToken(final User user) {
-        Claims claims = Jwts.claims().setSubject(user.getEmail());
-        claims.put("email", user.getEmail());
-        claims.put("roles", user.getRole());
-        Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.SECONDS.toMillis(ACCESS_TOKEN_VALIDITY));
+        long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(user.getEmail())
-                .setIssuedAt(tokenCreateTime)
-                .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .subject(user.getEmail())
+                .claim("email", user.getEmail())
+                .claim("roles", user.getRole())
+                .issuedAt(new Date(currentTimeMillis))
+                .expiration(new Date(currentTimeMillis + TimeUnit.SECONDS.toMillis(ACCESS_TOKEN_VALIDITY)))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
 
