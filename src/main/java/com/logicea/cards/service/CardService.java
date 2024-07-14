@@ -12,6 +12,7 @@ import com.logicea.cards.exception.NotFoundProblem;
 import com.logicea.cards.exception.UnauthorizedProblem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.logicea.cards.configuration.CacheConfig.CARD_CACHE_KEY;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -64,6 +67,7 @@ public class CardService {
         return card;
     }
 
+    @Cacheable(CARD_CACHE_KEY)
     public Page<CardResponseDto> searchCards(final List<Status> status, final LocalDate dateCreated,
                                              final String search, final Pageable pageable, final User user) {
         return cardRepository.findAll(CardSpecification.searchCard(status, dateCreated, search, user), pageable)
