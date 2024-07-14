@@ -3,13 +3,16 @@ package com.logicea.cards.configuration;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 
+@Configuration
+@EnableCaching
 public class CacheConfig implements CachingConfigurer {
 
     public static final String CARD_CACHE_KEY = "cardCache";
@@ -30,9 +33,5 @@ public class CacheConfig implements CachingConfigurer {
                 Caffeine.newBuilder()
                 .expireAfterWrite(duration)
                 .build());
-    }
-
-    void evictCache() {
-        Objects.requireNonNull(Objects.requireNonNull(cacheManager()).getCache(CARD_CACHE_KEY)).clear();
     }
 }

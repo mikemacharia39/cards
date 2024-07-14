@@ -12,6 +12,8 @@ import com.logicea.cards.exception.NotFoundProblem;
 import com.logicea.cards.exception.UnauthorizedProblem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +31,14 @@ import static com.logicea.cards.configuration.CacheConfig.CARD_CACHE_KEY;
 @RequiredArgsConstructor
 @Service
 public class CardService {
-
     private final CardRepository cardRepository;
     private final CardMapper cardMapper;
+    private final CacheManager cacheManager;
 
     public CardResponseDto addCard(final CardRequestDto dto, final User user) {
         Card card = cardRepository.save(cardMapper.toEntity(dto, user));
         log.info("Card created: {}", card.getName());
+        evictCache();
         return cardMapper.toDto(card);
     }
 
@@ -48,6 +51,7 @@ public class CardService {
         card.setStatus(dto.status());
 
         log.info("Card updated: {}", card.getName());
+        evictCache();
         return cardMapper.toDto(cardRepository.save(card));
     }
 
@@ -81,11 +85,19 @@ public class CardService {
         } else {
             throw new NotFoundProblem("Card not found", Map.of("id", id));
         }
+        evictCache();
     }
 
     private void isAuthorized(final Card card, final User user) {
         if (!Objects.equals(card.getUser().getId(), user.getId()) && !user.isAdmin()) {
             throw new UnauthorizedProblem("Unauthorized");
+        }
+    }
+
+    void evictCache() {
+        Cache cache = cacheManager.getCache(CARD_CACHE_KEY);
+        if (cache != null) {
+            cache.clear();
         }
     }
 }

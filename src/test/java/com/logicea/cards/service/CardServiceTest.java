@@ -11,10 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.CacheManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,12 +25,13 @@ class CardServiceTest {
     @Mock
     private CardRepository cardRepository;
     private CardService cardService;
-    private CardMapperImpl cardMapper;
+    @Mock
+    private CacheManager cacheManager;
 
     @BeforeEach
     void setup() {
-        cardMapper = new CardMapperImpl();
-        cardService = new CardService(cardRepository, cardMapper);
+        CardMapperImpl cardMapper = new CardMapperImpl();
+        cardService = new CardService(cardRepository, cardMapper, cacheManager);
     }
 
     @DisplayName("To test the add card addition feature")
@@ -60,7 +61,6 @@ class CardServiceTest {
         CardResponseDto responseDto = cardService.addCard(cardRequestDto, user);
         assertThat(responseDto).isNotNull();
         assertThat(responseDto.name()).isEqualTo("Test Card");
-
         Mockito.verify(cardRepository, Mockito.times(1)).save(any());
     }
 }
